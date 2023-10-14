@@ -12,8 +12,8 @@ void build(int ind, int low, int high){
 
     //if doesn't match the base case execution starts from here
     int mid=(low + high) / 2;
-    build(2 * ind, low, mid);//(2 * 0 + 1, 0 , 4) [for 0 to 8]
-    build(2 * ind + 1, mid + 1, high);//(2 * 0 + 1, 5 , 8)
+    build(2 * ind, low, mid);//(2 * 1, 1 , 4) [for 1 to 8]
+    build(2 * ind + 1, mid + 1, high);//(2 * 1 + 1, 5 , 8)
 
     //backtracking
     seg[ind] = seg[2 * ind] + seg[2 * ind + 1]; 
