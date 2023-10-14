@@ -6,54 +6,54 @@ This is a code segment tree with build,query,update function to find the max ele
 using namespace std;
 int a[100005], tree[4 * 100005];
 
-void build(int node, int low, int high){
+void build(int node, int st, int en){
 
     //if returns bactracking will be execute 
-    if(low == high){
-        tree[node] = a[low];
+    if(st == en){
+        tree[node] = a[st];
         return;
     }
 
     //if doesn't match the base case execution starts from here
-    int mid=(low + high) / 2;
-    build(2 * node, low, mid);//(2 * 1 , 1 , 4) [for 1 to 8]
-    build(2 * node + 1, mid + 1, high);//(2 * 1 + 1, 5 , 8) [for 3 to 8]
+    int mid=(st + en) / 2;
+    build(2 * node, st, mid);//(2 * 1 , 1 , 4) [for 1 to 8]
+    build(2 * node + 1, mid + 1, en);//(2 * 1 + 1, 5 , 8) [for 3 to 8]
 
     //backtracking
     tree[node] = max(tree[2 * node],tree[2 * node + 1]); 
 
 }
 
-int query(int node, int low, int high, int l, int r){//l,r is to compare whether the range lies or not between low and high[index of nodes]
+int query(int node, int st, int en, int l, int r){//l,r is to compare whether the range lies or not between st and en[index of nodes]
 
     //base case -> completely lies
-    if(low >= l && high <= r){
+    if(st >= l && en <= r){
         return tree[node];
     }
 
-    if(high < l || low > r) return INT_MIN;//high is less than l that means out of range
+    if(en < l || st > r) return INT_MIN;//en is less than l that means out of range
 
     //moving towards the left and right subtree finding the max of them
-    int mid = (low + high) / 2;
-    int left = query(2 * node, low , mid, l, r);
-    int right =query(2 * node + 1, mid + 1, high, l, r);
+    int mid = (st + en) / 2;
+    int left = query(2 * node, st , mid, l, r);
+    int right =query(2 * node + 1, mid + 1, en, l, r);
     return max(left , right);
 
 }
 
-void update(int node, int low, int high, int idx, int val){
-    if(low == high){
+void update(int node, int st, int en, int idx, int val){
+    if(st == en){
         tree[node] = val;
-        a[low] = val;
+        a[st] = val;
         return;
     }
 
-    int mid = (low + high) / 2;
+    int mid = (st + en) / 2;
     if(idx <= mid){
-        update(2 * node, low, mid, idx, val);
+        update(2 * node, st, mid, idx, val);
     }
     else{
-        update(2 * node + 1, mid + 1, high, idx, val);
+        update(2 * node + 1, mid + 1, en, idx, val);
     }
 
     tree[node] = max(tree[2 * node],tree[2 * node + 1]); 
